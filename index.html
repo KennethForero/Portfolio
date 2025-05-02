@@ -1,382 +1,837 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Portfolio</title>
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="mediaqueries.css" />
-  </head>
-  <body>
-    <nav id="desktop-nav">
-      <div class="logo">Kenneth Forero</div>
-      <div>
-        <ul class="nav-links">
-          <li><a href="#about">About</a></li>
-          <li><a href="#experience">Experience</a></li>
-          <li><a href="#projects">Projects</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </div>
-    </nav>
-    <nav id="hamburger-nav">
-      <div class="logo">Kenneth Forero</div>
-      <div class="hamburger-menu">
-        <div class="hamburger-icon" onclick="toggleMenu()">
-          <span></span>
-          <span></span>
-          <span></span>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Portafolio de Kenneth Forero, desarrollador de videojuegos y experiencias inmersivas." />
+  <meta name="author" content="Kenneth Forero" />
+  <title>Kenneth Forero - Game Developer</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+  <style>
+    /* Background & Overlay */
+    body {
+      background: url('/assets/Hero.png') center/cover no-repeat fixed;
+      color: #F5E8C7;
+    }
+    .hero-overlay {
+      @apply absolute inset-0 bg-black bg-opacity-65;
+      z-index: -1;
+    }
+    /* Custom Buttons */
+    .btn-animated {
+      @apply relative overflow-hidden transition-all duration-300 ease-in-out;
+    }
+    .btn-animated::before {
+      content: '';
+      @apply absolute inset-y-0 left-[-100%] w-full bg-gradient-to-r from-transparent via-yellow-100/50 to-transparent;
+      transition: transform 0.5s ease;
+    }
+    .btn-animated:hover::before {
+      transform: translateX(200%);
+    }
+    .btn-animated:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(244, 162, 97, 0.4);
+    }
+    /* Portfolio Scroll Container */
+    .portfolio-container {
+      display: flex;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      padding-bottom: 1rem;
+    }
+    .portfolio-container::-webkit-scrollbar {
+      display: none;
+    }
+    .portfolio-item {
+      flex: 0 0 auto;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+    .portfolio-item:hover {
+      transform: scale(1.1);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+      z-index: 10;
+    }
+    .portfolio-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(244, 162, 97, 0.8);
+      color: #F5E8C7;
+      padding: 1rem;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 10;
+      transition: background 0.3s ease;
+    }
+    .portfolio-arrow:hover {
+      background: rgba(244, 162, 97, 1);
+    }
+    .portfolio-arrow-left {
+      left: 0;
+    }
+    .portfolio-arrow-right {
+      right: 0;
+    }
+    /* Particle Styles */
+    #particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .particle {
+      position: absolute;
+      background: #FFD700;
+      border-radius: 100%;
+      opacity: 1;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 0 0 20px rgba(241, 206, 3, 0.726);
+    }
+    /* Form Feedback */
+    .form-message {
+      @apply mt-4 text-center text-sm;
+    }
+    .form-message.success {
+      @apply text-green-400;
+    }
+    .form-message.error {
+      @apply text-red-400;
+    }
+    /* Project Labels */
+    .project-image-container {
+      position: relative;
+      overflow: hidden;
+    }
+    .project-year,
+    .project-type {
+      position: absolute;
+      top: 10px;
+      padding: 0.25rem 0.5rem;
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 500;
+      border-radius: 0.25rem;
+      z-index: 5;
+    }
+    .project-year {
+      right: 10px;
+      background-color: #f97316cc;
+    }
+    .project-type {
+      left: 10px;
+    }
+
+    .project-type--Producto {
+      background-color: rgba(245, 158, 11, 0.8);
+    }
+    .project-type--Prototipo {
+      background-color: rgba(34, 197, 94, 0.8);
+    }
+    .project-type--GameJam {
+      background-color: rgba(124, 58, 237, 0.8);
+    }
+    .project-image-container img {
+      transition: transform 0.4s ease;
+    }
+    .portfolio-item:hover .project-image-container img {
+      transform: scale(1.1);
+    }
+    /* Skills Grid */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      justify-items: center;
+    }
+    .skill-card {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background-color: rgba(31, 41, 55, 0.5);
+      color: #F5E8C7;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 220px;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+    .skill-card img {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+    /* Responsive Adjustments */
+    @media (max-width: 1024px) {
+      .skills-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .portfolio-item {
+        width: 280px;
+      }
+    }
+    @media (max-width: 768px) {
+      .nav-menu {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+      .nav-menu .space-x-6 {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+      }
+      .portfolio-container {
+        flex-direction: row;
+        overflow-x: auto;
+      }
+      .portfolio-item {
+        width: 80vw;
+        max-width: 300px;
+      }
+      .portfolio-arrow {
+        padding: 0.75rem;
+      }
+      #inicio .max-w-5xl {
+        flex-direction: column;
+        text-align: center;
+      }
+      #inicio img {
+        margin-bottom: 1rem;
+      }
+      #inicio .flex-wrap {
+        justify-content: center;
+      }
+      .skills-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 640px) {
+      .nav-menu {
+        font-size: 0.875rem;
+      }
+      .nav-menu .space-x-6 {
+        gap: 0.5rem;
+      }
+      .project-year,
+      .project-type {
+        font-size: 0.65rem;
+        padding: 0.2rem 0.4rem;
+      }
+      .skills-grid {
+        grid-template-columns: 1fr;
+      }
+      .skill-card {
+        max-width: 100%;
+      }
+      h1.text-4xl {
+        font-size: 2rem;
+      }
+      h2.text-3xl {
+        font-size: 1.875rem;
+      }
+      .portfolio-arrow {
+        padding: 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body class="font-sans antialiased bg-gray-900 bg-opacity-95 relative">
+  <!-- Overlay -->
+  <div class="hero-overlay"></div>
+  <!-- Particles Container -->
+  <div id="particles" class="pointer-events-none fixed inset-0 z-0"></div>
+
+
+  <!-- Sección: Inicio -->
+  <section id="inicio" class="min-h-screen flex items-center justify-center px-6 pt-20">
+    <div class="max-w-5xl mx-auto flex flex-col lg:flex-row items-center gap-8 relative z-10">
+      <img src="/assets/profile-pic.png" alt="Retrato de Kenneth Forero, desarrollador de videojuegos" class="w-40 h-40 sm:w-48 sm:h-48 lg:w-56 lg:h-56 rounded-full border-4 border-orange-500 shadow-lg" />
+      <div class="text-center lg:text-left">
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-4">Hola, soy <span class="text-orange-500">Kenneth Forero</span></h1>
+        <p class="text-xl md:text-3xl mb-6">Game Developer</p>
+        <div class="flex flex-wrap justify-center lg:justify-start gap-4 items-center">
+          <a href="/path-to-cv.pdf" download target="_blank" rel="noopener noreferrer" class="btn-animated bg-orange-500 text-white px-6 py-3 rounded-lg font-semibold">Descargar CV</a>
+          <div class="flex gap-2">
+            <a href="https://linkedin.com" target="_blank" class="btn-animated bg-orange-500 text-white p-2 rounded-full">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.761 0 5-2.239 5-5v-14c0-2.761-2.239-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.5c-.966 0-1.75-.784-1.75-1.75s.784-1.75 1.75-1.75 1.75.784 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.5h-3v-5.5c0-1.378-1.122-2.5-2.5-2.5s-2.5 1.122-2.5 2.5v5.5h-3v-11h3v1.541c1.104-1.022 2.396-1.541 4-1.541 3.313 0 5 2.687 5 6v5z"/>
+              </svg>
+            </a>
+            <a href="https://itch.io" target="_blank" class="btn-animated bg-orange-500 text-white p-2 rounded-full">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 0C5.373 0 0 5.373 0 12c0 3.515 1.512 6.664 3.928 8.885a11.966 11.966 0 008.072 3.115c2.884 0 5.523-.99 7.614-2.64A11.966 11.966 0 0024 12c0-6.627-5.373-12-12-12zm0 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm-2 14H8v-2h2v2zm6 0h-2v-2h2v2zm-3-4h-2v-6h2v6z"/>
+              </svg>
+            </a>
+            <a href="https://github.com" target="_blank" aria-label="GitHub" class="btn-animated bg-orange-500 text-white p-2 rounded-full">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 0C5.373 0 0 5.373 0 12c0 5.303 3.438 9.8 8.205 11.387.6.113.82-.26.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.757-1.333-1.757-1.09-.745.083-.729.083-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.834 2.809 1.304 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.303 24 12c0-6.627-5.373-12-12-12z"/>
+              </svg>
+            </a>
+          </div>
         </div>
-        <div class="menu-links">
-          <li><a href="#about" onclick="toggleMenu()">About</a></li>
-          <li><a href="#experience" onclick="toggleMenu()">Experience</a></li>
-          <li><a href="#projects" onclick="toggleMenu()">Projects</a></li>
-          <li><a href="#contact" onclick="toggleMenu()">Contact</a></li>
-        </div>
       </div>
-    </nav>
-    <section id="profile">
-      <div class="section__pic-container">
-        <img src="./assets/profile-pic.png" alt="Kenneth Forero profile picture" />
-      </div>
-      <div class="section__text">
-        <p class="section__text__p1">Hello, I'm</p>
-        <h1 class="title">En CONSTRUCCION</h1>
-        <p class="section__text__p2">Frontend Developer</p>
-        <div class="btn-container">
-          <button
-            class="btn btn-color-2"
-            onclick="window.open('./assets/resume-example.pdf')"
-          >
-            Download CV
-          </button>
-          <button class="btn btn-color-1" onclick="location.href='./#contact'">
-            Contact Info
-          </button>
+    </div>
+  </section>
+  <section id="perfil" class="relative py-12 px-6 font-sans text-white bg-cover bg-center overflow-hidden">
+    <section id="perfil" class="relative py-12 px-6 font-sans text-white bg-cover bg-center overflow-hidden">
+      <!-- Panel holográfico -->
+      <div class="relative max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 backdrop-blur-sm bg-white/5 rounded-2xl border border-orange-400/40 p-6 shadow-neon-orange">
+    
+          <!-- Botón de cerrar (ícono de close) -->
+  <button class="absolute top-1 right-1 rounded-full transition-all">
+    <img src="assets/close.png" alt="Cerrar" class="w-12 h-12 text-orange-100"/>
+  </button>
+        <!-- Columna 1: XP y Educación -->
+        <div class="flex flex-col justify-between gap-1">
+          <div class="p-4 rounded-xl  backdrop-blur-md hover:shadow-neon-orange transition-shadow">
+            <div class="flex justify-between items-center">
+              <img src="assets/nivel.png" alt="Icono nivel" class=" h-20">
+              <h3 class="text-orange-400 text-xl font-bold tracking-wide" style="color: #fcb07aea;">Nivel 28</h3>
+              
+              
+            </div>
+          </div>
+          <div class="p-4 rounded-xl border border-orange-400/50 backdrop-blur-md hover:shadow-neon-orange transition-shadow text-right">
+            <h3 class="text-orange-300 text-xl font-bold mb-2 tracking-wide">Experiencia</h3>
+            <p class="text-sm text-orange-100"> 3 años en desarrollo XR, diseño UI/UX.</p>
+          </div>
+          <div class="p-4 rounded-xl border border-orange-400/50 backdrop-blur-md hover:shadow-neon-orange transition-shadow text-right">
+            <h3 class="text-orange-300 text-xl font-bold mb-2 tracking-wide">Educación</h3>
+            <p class="text-sm text-orange-100">Ingeniería Multimedia – Universidad Militar Nueva Granada. Cursos en efectos visuales, desarrollo Unity, narrativa interactiva y realidad aumentada.</p>
+          </div>
         </div>
-        <div id="socials-container">
-          <img
-            src="./assets/linkedin.png"
-            alt="My LinkedIn profile"
-            class="icon"
-            onclick="location.href='https://linkedin.com/'"
-          />
-          <img
-            src="./assets/github.png"
-            alt="My Github profile"
-            class="icon"
-            onclick="location.href='https://github.com/'"
-          />
+    
+        <!-- Columna 2: Avatar rectangular adaptado -->
+        <div class="flex items-center justify-center">
+          <div class="relative w-full max-w-[220px]">
+            <img src="assets/avatar.png" alt="Avatar" />
+          </div>
         </div>
-      </div>
+    
+        <!-- Columna 3: Habilidades en formato slot -->
+        <div>
+          <h3 class="text-orange-300 text-xl font-bold mb-4 tracking-wider">Habilidades</h3>
+          <div class="grid grid-cols-4 gap-3">
+            <!-- Unity -->
+            <div class="flex flex-col items-center justify-between p-2 bg-orange-950/30 border border-orange-400/50 rounded-md hover:scale-105 transition-transform shadow-sm shadow-orange-900">
+              <img src="assets/Unity.png" class="w-8 h-8 mb-1" alt="Unity" />
+              <span class="text-[10px] text-orange-100 text-center tracking-wide">Unity</span>
+            </div>
+            <!-- C# -->
+            <div class="flex flex-col items-center justify-between p-2 bg-orange-950/30 border border-orange-400/50 rounded-md hover:scale-105 transition-transform shadow-sm shadow-orange-900">
+              <img src="assets/Csharp.png" class="w-8 h-8 mb-1" alt="C#" />
+              <span class="text-[10px] text-orange-100 text-center tracking-wide">C#</span>
+            </div>
+            <!-- Python -->
+            <div class="flex flex-col items-center justify-between p-2 bg-orange-950/30 border border-orange-400/50 rounded-md hover:scale-105 transition-transform shadow-sm shadow-orange-900">
+              <img src="assets/Python.png" class="w-8 h-8 mb-1" alt="Python" />
+              <span class="text-[10px] text-orange-100 text-center tracking-wide">Python</span>
+            </div>
+            <!-- HTML -->
+            <div class="flex flex-col items-center justify-between p-2 bg-orange-950/30 border border-orange-400/50 rounded-md hover:scale-105 transition-transform shadow-sm shadow-orange-900">
+              <img src="assets/HTML.png" class="w-8 h-8 mb-1" alt="HTML" />
+              <span class="text-[10px] text-orange-100 text-center tracking-wide">HTML</span>
+            </div>
+            <!-- CSS -->
+            <div class="flex flex-col items-center justify-between p-2 bg-orange-950/30 border border-orange-400/50 rounded-md hover:scale-105 transition-transform shadow-sm shadow-orange-900">
+              <img src="assets/CSS.png" class="w-8 h-8 mb-1" alt="CSS" />
+              <span class="text-[10px] text-orange-100 text-center tracking-wide">CSS</span>
+            </div>
+            <!-- Adobe -->
+            <div class="flex flex-col items-center justify-between p-2 bg-orange-950/30 border border-orange-400/50 rounded-md hover:scale-105 transition-transform shadow-sm shadow-orange-900">
+              <img src="assets/Adobe.png" class="w-8 h-8 mb-1" alt="Adobe" />
+              <span class="text-[10px] text-orange-100 text-center tracking-wide">Adobe</span>
+            </div>
+            <!-- UI/UX -->
+            <div class="flex flex-col items-center justify-between p-2 bg-orange-950/30 border border-orange-400/50 rounded-md hover:scale-105 transition-transform shadow-sm shadow-orange-900">
+              <img src="assets/UIUX.png" class="w-8 h-8 mb-1" alt="UI/UX" />
+              <span class="text-[10px] text-orange-100 text-center tracking-wide">UI/UX</span>
+            </div>
+            <!-- Meta Quest -->
+            <div class="flex flex-col items-center justify-between p-2 bg-orange-950/30 border border-orange-400/50 rounded-md hover:scale-105 transition-transform shadow-sm shadow-orange-900">
+              <img src="assets/MetaQuest.png" class="w-8 h-8 mb-1" alt="Meta Quest" />
+              <span class="text-[10px] text-orange-100 text-center tracking-wide">Meta Quest</span>
+            </div>
+            <!-- GitHub -->
+            <div class="flex flex-col items-center justify-between p-2 bg-orange-950/30 border border-orange-400/50 rounded-md hover:scale-105 transition-transform shadow-sm shadow-orange-900">
+              <img src="assets/GitHub.png" class="w-8 h-8 mb-1" alt="GitHub" />
+              <span class="text-[10px] text-orange-100 text-center tracking-wide">GitHub</span>
+            </div>
+            <!-- XR -->
+            <div class="flex flex-col items-center justify-between p-2 bg-orange-950/30 border border-orange-400/50 rounded-md hover:scale-105 transition-transform shadow-sm shadow-orange-900">
+              <img src="assets/XR.png" class="w-8 h-8 mb-1" alt="XR" />
+              <span class="text-[10px] text-orange-100 text-center tracking-wide">XR</span>
+            </div>
+            <!-- ARCore -->
+            <div class="flex flex-col items-center justify-between p-2 bg-orange-950/30 border border-orange-400/50 rounded-md hover:scale-105 transition-transform shadow-sm shadow-orange-900">
+              <img src="assets/ARCore.png" class="w-8 h-8 mb-1" alt="ARCore" />
+              <span class="text-[10px] text-orange-100 text-center tracking-wide">ARCore</span>
+            </div>
+            <!-- ARKit -->
+            <div class="flex flex-col items-center justify-between p-2 bg-orange-950/30 border border-orange-400/50 rounded-md hover:scale-105 transition-transform shadow-sm shadow-orange-900">
+              <img src="assets/ARKit.png" class="w-8 h-8 mb-1" alt="ARKit" />
+              <span class="text-[10px] text-orange-100 text-center tracking-wide">ARKit</span>
+            </div>
+            <!-- Vuforia -->
+            <div class="flex flex-col items-center justify-between p-2 bg-orange-950/30 border border-orange-400/50 rounded-md hover:scale-105 transition-transform shadow-sm shadow-orange-900">
+              <img src="assets/Vuforia.png" class="w-8 h-8 mb-1" alt="Vuforia" />
+              <span class="text-[10px] text-orange-100 text-center tracking-wide">Vuforia</span>
+            </div>
+            <!-- XRToolkit -->
+            <div class="flex flex-col items-center justify-between p-2 bg-orange-950/30 border border-orange-400/50 rounded-md hover:scale-105 transition-transform shadow-sm shadow-orange-900">
+              <img src="assets/XRToolkit.png" class="w-8 h-8 mb-1" alt="XRToolkit" />
+              <span class="text-[10px] text-orange-100 text-center tracking-wide">XRToolkit</span>
+            </div>
+            <!-- WebXR -->
+            <div class="flex flex-col items-center justify-between p-2 bg-orange-950/30 border border-orange-400/50 rounded-md hover:scale-105 transition-transform shadow-sm shadow-orange-900">
+              <img src="assets/WebXR.png" class="w-8 h-8 mb-1" alt="WebXR" />
+              <span class="text-[10px] text-orange-100 text-center tracking-wide">WebXR</span>
+            </div>
+            <!-- Maya -->
+            <div class="flex flex-col items-center justify-between p-2 bg-orange-950/30 border border-orange-400/50 rounded-md hover:scale-105 transition-transform shadow-sm shadow-orange-900">
+              <img src="assets/Maya.png" class="w-8 h-8 mb-1" alt="Maya" />
+              <span class="text-[10px] text-orange-100 text-center tracking-wide">Maya</span>
+            </div>
+          </div>
+        </div>
+        
+      <!-- Estilos personalizados -->
+      <style>
+        .shadow-neon-orange {
+          box-shadow: 0 0 8px rgb(255, 94, 0), 0 0 16px rgba(255, 80, 0, 0.3);
+        }
+      </style>
     </section>
-    <section id="about">
-      <p class="section__text__p1">Get To Know More</p>
-      <h1 class="title">About Me</h1>
-      <div class="section-container">
-        <div class="section__pic-container">
-          <img
-            src="./assets/about-pic.png"
-            alt="Profile picture"
-            class="about-pic"
-          />
+    
+  
+    <!-- Estilos y animaciones personalizados -->
+    <style>
+      @keyframes float-slow {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+      }
+      .animate-float-slow {
+        animation: float-slow 10s infinite ease-in-out;
+      }
+      .shadow-neon-orange {
+        box-shadow: 0 0 8px rgba(255, 140, 0, 0.6), 0 0 16px rgba(255, 80, 0, 0.3);
+      }
+      .animate-flicker {
+        animation: flicker 3s infinite alternate;
+      }
+      @keyframes flicker {
+        0% { opacity: 0.95; filter: drop-shadow(0 0 2px orange); }
+        100% { opacity: 1; filter: drop-shadow(0 0 4px orangered); }
+      }
+    </style>
+  </section>
+  
+
+<!-- Sección: Portafolio -->
+<section id="portafolio" class="py-16">
+  <div class="container mx-auto px-6">
+    <h2 class="text-3xl sm:text-4xl font-bold text-center mb-12">Proyectos</h2>
+
+    <!-- Grid de Productos -->
+    <div class="mb-16">
+      <h3 class="text-2xl font-semibold text-center mb-6">Productos</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-center">
+        <!-- Tienda Virtual Gamificada -->
+        <div class="portfolio-item w-96 bg-gray-900 bg-opacity-50 rounded-lg shadow-lg overflow-hidden">
+          <div class="project-image-container">
+            <img src="assets/tienda-virtual-gamificada.gif" alt="Tienda Virtual Gamificada" class="w-full h-56 object-cover" />
+            <span class="project-type project-type--Producto">Producto</span>
+            <span class="project-year">2024</span>
+          </div>
+          <div class="p-4">
+            <h3 class="text-lg font-semibold mb-2">Tienda Virtual Gamificada</h3>
+            <p class="text-sm text-gray-300 mb-2">xxxxxxxxxxxxx</p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs">Unity 3D</span>
+              <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs">VR</span>
+              <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs">Developer</span>
+              <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs">Modelado 3D</span>
+            </div>
+            <a href="https://kedafdev.itch.io/tienda-virtual-gamificada-en-realidad-virtual" class="btn-animated bg-orange-500 text-white block text-center py-2 rounded-full font-medium">Ver Proyecto</a>
+          </div>
         </div>
-        <div class="about-details-container">
-          <div class="about-containers">
-            <div class="details-container">
-              <img
-                src="./assets/experience.png"
-                alt="Experience icon"
-                class="icon"
-              />
-              <h3>Experience</h3>
-              <p>2+ years <br />Frontend Development</p>
-            </div>
-            <div class="details-container">
-              <img
-                src="./assets/education.png"
-                alt="Education icon"
-                class="icon"
-              />
-              <h3>Education</h3>
-              <p>B.Sc. Bachelors Degree<br />M.Sc. Masters Degree</p>
-            </div>
+        <!-- Capacitación Seguridad Laboral -->
+        <div class="portfolio-item w-96 bg-gray-900 bg-opacity-50 rounded-lg shadow-lg overflow-hidden">
+          <div class="project-image-container">
+            <img src="assets/capacitacion-seguridad-laboral.gif" alt="Capacitación Seguridad Laboral" class="w-full h-56 object-cover" />
+            <span class="project-type project-type--Producto">Producto</span>
+            <span class="project-year">2024</span>
           </div>
-          <div class="text-container">
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic quis
-              reprehenderit et laborum, rem, dolore eum quod voluptate
-              exercitationem nobis, nihil esse debitis maxime facere minus sint
-              delectus velit in eos quo officiis explicabo deleniti dignissimos.
-              Eligendi illum libero dolorum cum laboriosam corrupti quidem,
-              reiciendis ea magnam? Nulla, impedit fuga!
-            </p>
+          <div class="p-4">
+            <h3 class="text-lg font-semibold mb-2">Capacitación Seguridad Laboral</h3>
+            <p class="text-sm text-gray-300 mb-2">xxxxxxxxxxxxx</p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs">Unity 3D</span>
+              <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs">VR</span>
+              <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs">Modelado 3D</span>
+            </div>
+            <a href="https://kedafdev.itch.io/capacitacion-seguridad-laboral-vr" class="btn-animated bg-orange-500 text-white block text-center py-2 rounded-full font-medium">Ver Proyecto</a>
           </div>
         </div>
-      </div>
-      <img
-        src="./assets/arrow.png"
-        alt="Arrow icon"
-        class="icon arrow"
-        onclick="location.href='./#experience'"
-      />
-    </section>
-    <section id="experience">
-      <p class="section__text__p1">Explore My</p>
-      <h1 class="title">Experience</h1>
-      <div class="experience-details-container">
-        <div class="about-containers">
-          <div class="details-container">
-            <h2 class="experience-sub-title">Frontend Development</h2>
-            <div class="article-container">
-              <article>
-                <img
-                  src="./assets/checkmark.png"
-                  alt="Experience icon"
-                  class="icon"
-                />
-                <div>
-                  <h3>HTML</h3>
-                  <p>Experienced</p>
-                </div>
-              </article>
-              <article>
-                <img
-                  src="./assets/checkmark.png"
-                  alt="Experience icon"
-                  class="icon"
-                />
-                <div>
-                  <h3>CSS</h3>
-                  <p>Experienced</p>
-                </div>
-              </article>
-              <article>
-                <img
-                  src="./assets/checkmark.png"
-                  alt="Experience icon"
-                  class="icon"
-                />
-                <div>
-                  <h3>SASS</h3>
-                  <p>Intermediate</p>
-                </div>
-              </article>
-              <article>
-                <img
-                  src="./assets/checkmark.png"
-                  alt="Experience icon"
-                  class="icon"
-                />
-                <div>
-                  <h3>JavaScript</h3>
-                  <p>Basic</p>
-                </div>
-              </article>
-              <article>
-                <img
-                  src="./assets/checkmark.png"
-                  alt="Experience icon"
-                  class="icon"
-                />
-                <div>
-                  <h3>TypeScript</h3>
-                  <p>Basic</p>
-                </div>
-              </article>
-              <article>
-                <img
-                  src="./assets/checkmark.png"
-                  alt="Experience icon"
-                  class="icon"
-                />
-                <div>
-                  <h3>Material UI</h3>
-                  <p>Intermediate</p>
-                </div>
-              </article>
-            </div>
+        <!-- Capacitación Área TI -->
+        <div class="portfolio-item w-96 bg-gray-900 bg-opacity-50 rounded-lg shadow-lg overflow-hidden">
+          <div class="project-image-container">
+            <img src="assets/capacitacion-area-ti.gif" alt="Capacitación Área TI" class="w-full h-56 object-cover" />
+            <span class="project-type project-type--Producto">Producto</span>
+            <span class="project-year">2022</span>
           </div>
-          <div class="details-container">
-            <h2 class="experience-sub-title">Frontend Development</h2>
-            <div class="article-container">
-              <article>
-                <img
-                  src="./assets/checkmark.png"
-                  alt="Experience icon"
-                  class="icon"
-                />
-                <div>
-                  <h3>PostgreSQL</h3>
-                  <p>Basic</p>
-                </div>
-              </article>
-              <article>
-                <img
-                  src="./assets/checkmark.png"
-                  alt="Experience icon"
-                  class="icon"
-                />
-                <div>
-                  <h3>Node JS</h3>
-                  <p>Intermediate</p>
-                </div>
-              </article>
-              <article>
-                <img
-                  src="./assets/checkmark.png"
-                  alt="Experience icon"
-                  class="icon"
-                />
-                <div>
-                  <h3>Express JS</h3>
-                  <p>Intermediate</p>
-                </div>
-              </article>
-              <article>
-                <img
-                  src="./assets/checkmark.png"
-                  alt="Experience icon"
-                  class="icon"
-                />
-                <div>
-                  <h3>Git</h3>
-                  <p>Intermediate</p>
-                </div>
-              </article>
+          <div class="p-4">
+            <h3 class="text-lg font-semibold mb-2">Capacitación Área TI</h3>
+            <p class="text-sm text-gray-300 mb-2">xxxxxxxxxxxxx</p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs">Unity 3D</span>
+              <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs">VR</span>
+              <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs">Modelado 3D</span>
             </div>
+            <a href="https://kedafdev.itch.io/capacitacin-area-ti-vr" class="btn-animated bg-orange-500 text-white block text-center py-2 rounded-full font-medium">Ver Proyecto</a>
+          </div>
+        </div>
+        <!-- Capacitación en Ciberseguridad -->
+        <div class="portfolio-item w-96 bg-gray-900 bg-opacity-50 rounded-lg shadow-lg overflow-hidden">
+          <div class="project-image-container">
+            <img src="assets/capacitacion-ciberseguridad.png" alt="Capacitación en Ciberseguridad" class="w-full h-56 object-cover" />
+            <span class="project-type project-type--Producto">Producto</span>
+            <span class="project-year">2024</span>
+          </div>
+          <div class="p-4">
+            <h3 class="text-lg font-semibold mb-2">Capacitación en Ciberseguridad</h3>
+            <p class="text-sm text-gray-300 mb-2">xxxxxxxxxxxxx</p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs">Unity 3D</span>
+              <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs">VR</span>
+              <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs">Modelado 3D</span>
+            </div>
+            <a href="https://kedafdev.itch.io/capacitacion-en-ciberseguridad-vr" class="btn-animated bg-orange-500 text-white block text-center py-2 rounded-full font-medium">Ver Proyecto</a>
+          </div>
+        </div>
+        <!-- Desafíos Creativos -->
+        <div class="portfolio-item w-96 bg-gray-900 bg-opacity-50 rounded-lg shadow-lg overflow-hidden">
+          <div class="project-image-container">
+            <img src="assets/desafios-creativos.gif" alt="Desafíos Creativos" class="w-full h-56 object-cover" />
+            <span class="project-type project-type--Producto">Producto</span>
+            <span class="project-year">2023</span>
+          </div>
+          <div class="p-4">
+            <h3 class="text-lg font-semibold mb-2">Desafíos Creativos</h3>
+            <p class="text-sm text-gray-300 mb-2">xxxxxxxxxxxxx</p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs">Unity 3D</span>
+              <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs">VR</span>
+              <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs">Modelado 3D</span>
+            </div>
+            <a href="https://kedafdev.itch.io/innovacion-vr-desafios-creativos" class="btn-animated bg-orange-500 text-white block text-center py-2 rounded-full font-medium">Ver Proyecto</a>
           </div>
         </div>
       </div>
-      <img
-        src="./assets/arrow.png"
-        alt="Arrow icon"
-        class="icon arrow"
-        onclick="location.href='./#projects'"
-      />
-    </section>
-    <section id="projects">
-      <p class="section__text__p1">Browse My Recent</p>
-      <h1 class="title">Projects</h1>
-      <div class="experience-details-container">
-        <div class="about-containers">
-          <div class="details-container color-container">
-            <div class="article-container">
-              <img
-                src="./assets/project-1.png"
-                alt="Project 1"
-                class="project-img"
-              />
-            </div>
-            <h2 class="experience-sub-title project-title">Project One</h2>
-            <div class="btn-container">
-              <button
-                class="btn btn-color-2 project-btn"
-                onclick="location.href='https://github.com/'"
-              >
-                Github
-              </button>
-              <button
-                class="btn btn-color-2 project-btn"
-                onclick="location.href='https://github.com/'"
-              >
-                Live Demo
-              </button>
-            </div>
+    </div>
+
+    <!-- Grid de GameJams -->
+    <div class="mb-16">
+      <h3 class="text-2xl font-semibold text-center mb-6">GameJams</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-center">
+        <!-- ElRescatista -->
+        <div class="portfolio-item w-96 bg-gray-900 bg-opacity-50 rounded-lg shadow-lg overflow-hidden">
+          <div class="project-image-container">
+            <img src="assets/elrescatista.png" alt="ElRescatista" class="w-full h-56 object-cover" />
+            <span class="project-type project-type--GameJam">GameJam</span>
+            <span class="project-year">2024</span>
           </div>
-          <div class="details-container color-container">
-            <div class="article-container">
-              <img
-                src="./assets/project-2.png"
-                alt="Project 2"
-                class="project-img"
-              />
+          <div class="p-4">
+            <h3 class="text-lg font-semibold mb-2">ElRescatista</h3>
+            <p class="text-sm text-gray-300 mb-2">xxxxxxxxxxxxx</p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs">Unity 3D</span>
+              <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs">VR</span>
             </div>
-            <h2 class="experience-sub-title project-title">Project Two</h2>
-            <div class="btn-container">
-              <button
-                class="btn btn-color-2 project-btn"
-                onclick="location.href='https://github.com/'"
-              >
-                Github
-              </button>
-              <button
-                class="btn btn-color-2 project-btn"
-                onclick="location.href='https://github.com/'"
-              >
-                Live Demo
-              </button>
-            </div>
+            <a href="https://kedafdev.itch.io/elrescatista" class="btn-animated bg-orange-500 text-white block text-center py-2 rounded-full font-medium">Ver Proyecto</a>
           </div>
-          <div class="details-container color-container">
-            <div class="article-container">
-              <img
-                src="./assets/project-3.png"
-                alt="Project 3"
-                class="project-img"
-              />
+        </div>
+        <!-- Wizard's Quest -->
+        <div class="portfolio-item w-96 bg-gray-900 bg-opacity-50 rounded-lg shadow-lg overflow-hidden">
+          <div class="project-image-container">
+            <img src="assets/wizards-quest.png" alt="Wizard's Quest" class="w-full h-56 object-cover" />
+            <span class="project-type project-type--GameJam">GameJam</span>
+            <span class="project-year">2023</span>
+          </div>
+          <div class="p-4">
+            <h3 class="text-lg font-semibold mb-2">Wizard's Quest</h3>
+            <p class="text-sm text-gray-300 mb-2">xxxxxxxxxxxxx</p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs">Unity 3D</span>
+              <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs">WebGL</span>
             </div>
-            <h2 class="experience-sub-title project-title">Project Three</h2>
-            <div class="btn-container">
-              <button
-                class="btn btn-color-2 project-btn"
-                onclick="location.href='https://github.com/'"
-              >
-                Github
-              </button>
-              <button
-                class="btn btn-color-2 project-btn"
-                onclick="location.href='https://github.com/'"
-              >
-                Live Demo
-              </button>
+            <a href="https://kedafdev.itch.io/wizardsquest" class="btn-animated bg-orange-500 text-white block text-center py-2 rounded-full font-medium">Ver Proyecto</a>
+          </div>
+        </div>
+        <!-- Cosmo Raid -->
+        <div class="portfolio-item w-96 bg-gray-900 bg-opacity-50 rounded-lg shadow-lg overflow-hidden">
+          <div class="project-image-container">
+            <img src="assets/cosmo-raid.png" alt="Cosmo Raid" class="w-full h-56 object-cover" />
+            <span class="project-type project-type--GameJam">Game Developer</span>
+            <span class="project-year">2025</span>
+          </div>
+          <div class="p-4">
+            <h3 class="text-lg font-semibold mb-2">Cosmo Raid</h3>
+            <p class="text-sm text-gray-300 mb-2">xxxxxxxxxxxxx</p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs">Unity 2D</span>
+              <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs">WebGL</span>
             </div>
+            <a href="https://kedafdev.itch.io/cosmoraid" class="btn-animated bg-orange-500 text-white block text-center py-2 rounded-full font-medium">Ver Proyecto</a>
+          </div>
+        </div>
+        <!-- DeathsFortune -->
+        <div class="portfolio-item w-96 bg-gray-900 bg-opacity-50 rounded-lg shadow-lg overflow-hidden">
+          <div class="project-image-container">
+            <img src="assets/deathsfortune.png" alt="DeathsFortune" class="w-full h-56 object-cover" />
+            <span class="project-type project-type--GameJam">GameJam</span>
+            <span class="project-year">2023</span>
+          </div>
+          <div class="p-4">
+            <h3 class="text-lg font-semibold mb-2">DeathsFortune</h3>
+            <p class="text-sm text-gray-300 mb-2">xxxxxxxxxxxxx</p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs">Unity 3D</span>
+            </div>
+            <a href="https://kedafdev.itch.io/deathsfortune" class="btn-animated bg-orange-500 text-white block text-center py-2 rounded-full font-medium">Ver Proyecto</a>
           </div>
         </div>
       </div>
-      <img
-        src="./assets/arrow.png"
-        alt="Arrow icon"
-        class="icon arrow"
-        onclick="location.href='./#contact'"
-      />
-    </section>
-    <section id="contact">
-      <p class="section__text__p1">Get in Touch</p>
-      <h1 class="title">Contact Me</h1>
-      <div class="contact-info-upper-container">
-        <div class="contact-info-container">
-          <img
-            src="./assets/email.png"
-            alt="Email icon"
-            class="icon contact-icon email-icon"
-          />
-          <p><a href="mailto:examplemail@gmail.com">Example@gmail.com</a></p>
+    </div>
+
+    <!-- Grid de Prototipos -->
+    <div>
+      <h3 class="text-2xl font-semibold text-center mb-6">Prototipos</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-center">
+        <!-- ColorShape -->
+        <div class="portfolio-item w-96 bg-gray-900 bg-opacity-50 rounded-lg shadow-lg overflow-hidden">
+          <div class="project-image-container">
+            <img src="assets/colorshape.png" alt="ColorShape" class="w-full h-56 object-cover" />
+            <span class="project-type project-type--Prototipo">Prototipo</span>
+            <span class="project-year">2023</span>
+          </div>
+          <div class="p-4">
+            <h3 class="text-lg font-semibold mb-2">ColorShape</h3>
+            <p class="text-sm text-gray-300 mb-2">xxxxxxxxxxxxx</p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs">Unity 2D</span>
+            </div>
+            <a href="https://kedafdev.itch.io/colorshape" class="btn-animated bg-orange-500 text-white block text-center py-2 rounded-full font-medium">Ver Proyecto</a>
+          </div>
         </div>
-        <div class="contact-info-container">
-          <img
-            src="./assets/linkedin.png"
-            alt="LinkedIn icon"
-            class="icon contact-icon"
-          />
-          <p><a href="https://www.linkedin.com">LinkedIn</a></p>
+        <!-- FartBear -->
+        <div class="portfolio-item w-96 bg-gray-900 bg-opacity-50 rounded-lg shadow-lg overflow-hidden">
+          <div class="project-image-container">
+            <img src="assets/fartbear.png" alt="FartBear" class="w-full h-56 object-cover" />
+            <span class="project-type project-type--Prototipo">Prototipo</span>
+            <span class="project-year">2023</span>
+          </div>
+          <div class="p-4">
+            <h3 class="text-lg font-semibold mb-2">FartBear</h3>
+            <p class="text-sm text-gray-300 mb-2">xxxxxxxxxxxxx</p>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs">Unity 2D</span>
+            </div>
+            <a href="https://kedafdev.itch.io/fartbear" class="btn-animated bg-orange-500 text-white block text-center py-2 rounded-full font-medium">Ver Proyecto</a>
+          </div>
         </div>
       </div>
-    </section>
-    <footer>
-      <nav>
-        <div class="nav-links-container">
-          <ul class="nav-links">
-            <li><a href="#about">About</a></li>
-            <li><a href="#experience">Experience</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
-        </div>
-      </nav>
-      <p>Copyright &#169; 2023 Kenneth Forero. All Rights Reserved.</p>
-    </footer>
-    <script src="script.js"></script>
-  </body>
+    </div>
+  </div>
+</section>
+  
+
+
+  <!-- Footer -->
+  <footer class="py-6 bg-black bg-opacity-50 text-center">
+    <p class="text-sm text-gray-400">© 2025 Kenneth Forero. Todos los derechos reservados.</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // GSAP Animations
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Inicio section animation
+    gsap.from("#inicio", {
+      opacity: 0,
+      y: 50,
+      duration: 1
+    });
+    gsap.from("#inicio h1", {
+      opacity: 0,
+      y: 60,
+      duration: 1.2,
+      ease: "power3.out"
+    });
+    gsap.from("#inicio .btn-animated", {
+      opacity: 0,
+      y: 20,
+      duration: 0.8,
+      delay: 0.6,
+      stagger: 0.2,
+      ease: "power3.out"
+    });
+    gsap.from("#inicio img", {
+      opacity: 0,
+      scale: 0.8,
+      duration: 1,
+      ease: "elastic.out(1, 0.5)"
+    });
+
+    // Sobre Mi section animations
+    gsap.from("#sobre-mi div", {
+      opacity: 0,
+      y: 80,
+      duration: 1,
+      stagger: 0.2,
+      scrollTrigger: {
+        trigger: "#sobre-mi",
+        start: "top 80%",
+        toggleActions: "play none none none"
+      }
+    });
+
+    // Portfolio item animations
+    gsap.utils.toArray(".portfolio-item").forEach(item => {
+      gsap.from(item, {
+        opacity: 0,
+        y: 100,
+        duration: 1,
+        scrollTrigger: {
+          trigger: item,
+          start: "top 85%",
+          toggleActions: "play none none none"
+        }
+      });
+    });
+
+    // Herramientas section animations
+    gsap.utils.toArray(".skill-card").forEach(card => {
+      gsap.from(card, {
+        opacity: 0,
+        x: -80,
+        duration: 1,
+        stagger: 0.3,
+        scrollTrigger: {
+          trigger: "#herramientas",
+          start: "top 80%",
+          toggleActions: "play none none none"
+        }
+      });
+    });
+
+    // Contacto section animation
+    gsap.from("#contacto", {
+      opacity: 0,
+      y: 50,
+      duration: 1,
+      scrollTrigger: {
+        trigger: "#contacto",
+        start: "top 80%",
+        toggleActions: "play none none none"
+      }
+    });
+
+    // Particle System (Luciérnagas)
+    const particlesContainer = document.getElementById('particles');
+    const numParticles = 30;
+
+    for (let i = 0; i < numParticles; i++) {
+      const particle = document.createElement('div');
+      particle.classList.add('particle');
+      const size = Math.random() * 5 + 2;
+      particle.style.width = `${size}px`;
+      particle.style.height = `${size}px`;
+      particle.style.left = `${Math.random() * 100}vw`;
+      particle.style.top = `${Math.random() * 100}vh`;
+      particlesContainer.appendChild(particle);
+
+      gsap.to(particle, {
+        x: Math.random() * 200 - 100,
+        y: Math.random() * 200 - 100,
+        opacity: Math.random() * 0.8 + 0.2,
+        duration: Math.random() * 5 + 3,
+        repeat: -1,
+        yoyo: true,
+        ease: "power1.inOut",
+        delay: Math.random() * 5
+      });
+    }
+
+    // Portfolio Scroll Navigation
+    function scrollPortfolio(amount) {
+      const container = document.getElementById('portfolio-scroll');
+      const scrollWidth = container.scrollWidth;
+      const clientWidth = container.clientWidth;
+      const maxScroll = scrollWidth - clientWidth;
+      let currentScroll = container.scrollLeft;
+
+      if (amount > 0) {
+        // Desplazamiento hacia la derecha
+        if (currentScroll + amount >= maxScroll) {
+          container.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          container.scrollBy({ left: amount, behavior: 'smooth' });
+        }
+      } else {
+        // Desplazamiento hacia la izquierda
+        if (currentScroll + amount <= 0) {
+          container.scrollTo({ left: maxScroll, behavior: 'smooth' });
+        } else {
+          container.scrollBy({ left: amount, behavior: 'smooth' });
+        }
+      }
+    }
+
+    // Form Submission
+    document.getElementById('contact-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const formMessage = document.getElementById('form-message');
+
+      formMessage.textContent = '';
+      formMessage.className = 'form-message';
+
+      try {
+        const response = await fetch(form.action, {
+          method: form.method,
+          body: new FormData(form),
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          formMessage.textContent = '¡Mensaje enviado con éxito!';
+          formMessage.className = 'form-message success';
+          form.reset();
+        } else {
+          formMessage.textContent = 'Error al enviar el mensaje. Por favor, intenta de nuevo.';
+          formMessage.className = 'form-message error';
+        }
+      } catch (error) {
+        formMessage.textContent = 'Error al enviar el mensaje. Por favor, intenta de nuevo.';
+        formMessage.className = 'form-message error';
+      }
+    });
+  </script>
+</body>
 </html>
