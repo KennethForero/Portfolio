@@ -1,0 +1,249 @@
+/* Background & Overlay */
+body {
+    background: url('/assets/Hero.png') center/cover no-repeat fixed;
+    color: #F5E8C7;
+  }
+  .hero-overlay {
+    @apply absolute inset-0 bg-black bg-opacity-65;
+    z-index: -1;
+  }
+  /* Custom Buttons */
+  .btn-animated {
+    @apply relative overflow-hidden transition-all duration-300 ease-in-out;
+  }
+  .btn-animated::before {
+    content: '';
+    @apply absolute inset-y-0 left-[-100%] w-full bg-gradient-to-r from-transparent via-yellow-100/50 to-transparent;
+    transition: transform 0.5s ease;
+  }
+  .btn-animated:hover::before {
+    transform: translateX(200%);
+  }
+  .btn-animated:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(244, 162, 97, 0.4);
+  }
+  /* Portfolio Scroll Container */
+  .portfolio-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 1rem;
+  }
+  .portfolio-container::-webkit-scrollbar {
+    display: none;
+  }
+  .portfolio-item {
+    flex: 0 0 auto;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+  }
+  .portfolio-item:hover {
+    transform: scale(1.1);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+  }
+  .portfolio-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(244, 162, 97, 0.8);
+    color: #F5E8C7;
+    padding: 1rem;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    transition: background 0.3s ease;
+  }
+  .portfolio-arrow:hover {
+    background: rgba(244, 162, 97, 1);
+  }
+  .portfolio-arrow-left {
+    left: 0;
+  }
+  .portfolio-arrow-right {
+    right: 0;
+  }
+  /* Particle Styles */
+  #particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .particle {
+    position: absolute;
+    background: #FFD700;
+    border-radius: 100%;
+    opacity: 1;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 0 0 20px rgba(241, 206, 3, 0.726);
+  }
+  /* Form Feedback */
+  .form-message {
+    @apply mt-4 text-center text-sm;
+  }
+  .form-message.success {
+    @apply text-green-400;
+  }
+  .form-message.error {
+    @apply text-red-400;
+  }
+  /* Project Labels */
+  .project-image-container {
+    position: relative;
+    overflow: hidden;
+  }
+  .project-year,
+  .project-type {
+    position: absolute;
+    top: 10px;
+    padding: 0.25rem 0.5rem;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border-radius: 0.25rem;
+    z-index: 5;
+  }
+  .project-year {
+    right: 10px;
+    background-color: #f97316cc;
+  }
+  .project-type {
+    left: 10px;
+  }
+  .project-type--Producto {
+    background-color: rgba(245, 158, 11, 0.8);
+  }
+  .project-type--Prototipo {
+    background-color: rgba(34, 197, 94, 0.8);
+  }
+  .project-type--GameJam {
+    background-color: rgba(124, 58, 237, 0.8);
+  }
+  .project-image-container img {
+    transition: transform 0.4s ease;
+  }
+  .portfolio-item:hover .project-image-container img {
+    transform: scale(1.1);
+  }
+  /* Skills Grid */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    justify-items: center;
+  }
+  .skill-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background-color: rgba(31, 41, 55, 0.5);
+    color: #F5E8C7;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 220px;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+  .skill-card img {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  /* Responsive Adjustments */
+  @media (max-width: 1024px) {
+    .skills-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .portfolio-item {
+      width: 280px;
+    }
+  }
+  @media (max-width: 768px) {
+    .nav-menu {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+    .nav-menu .space-x-6 {
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+    }
+    .portfolio-container {
+      flex-direction: row;
+      overflow-x: auto;
+    }
+    .portfolio-item {
+      width: 80vw;
+      max-width: 300px;
+    }
+    .portfolio-arrow {
+      padding: 0.75rem;
+    }
+    #inicio .max-w-5xl {
+      flex-direction: column;
+      text-align: center;
+    }
+    #inicio img {
+      margin-bottom: 1rem;
+    }
+    #inicio .flex-wrap {
+      justify-content: center;
+    }
+    .skills-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 640px) {
+    .nav-menu {
+      font-size: 0.875rem;
+    }
+    .nav-menu .space-x-6 {
+      gap: 0.5rem;
+    }
+    .project-year,
+    .project-type {
+      font-size: 0.65rem;
+      padding: 0.2rem 0.4rem;
+    }
+    .skills-grid {
+      grid-template-columns: 1fr;
+    }
+    .skill-card {
+      max-width: 100%;
+    }
+    h1.text-4xl {
+      font-size: 2rem;
+    }
+    h2.text-3xl {
+      font-size: 1.875rem;
+    }
+    .portfolio-arrow {
+      padding: 0.5rem;
+    }
+  }
+  
+  /* Additional styles from <section id="perfil"> */
+  .shadow-neon-orange {
+    box-shadow: 0 0 8px rgb(255, 94, 0), 0 0 16px rgba(255, 80, 0, 0.3);
+  }
+  .animate-float-slow {
+    animation: float-slow 10s infinite ease-in-out;
+  }
+  .animate-flicker {
+    animation: flicker 3s infinite alternate;
+  }
+  @keyframes float-slow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes flicker {
+    0% { opacity: 0.95; filter: drop-shadow(0 0 2px orange); }
+    100% { opacity: 1; filter: drop-shadow(0 0 4px orangered); }
+  }
