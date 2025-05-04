@@ -28,19 +28,6 @@ gsap.from("#inicio img", {
   ease: "elastic.out(1, 0.5)"
 });
 
-// Sobre Mi section animations
-gsap.from("#sobre-mi div", {
-  opacity: 0,
-  y: 80,
-  duration: 1,
-  stagger: 0.2,
-  scrollTrigger: {
-    trigger: "#sobre-mi",
-    start: "top 80%",
-    toggleActions: "play none none none"
-  }
-});
-
 // Portfolio item animations
 gsap.utils.toArray(".portfolio-item").forEach(item => {
   gsap.from(item, {
@@ -70,17 +57,7 @@ gsap.utils.toArray(".skill-card").forEach(card => {
   });
 });
 
-// Contacto section animation
-gsap.from("#contacto", {
-  opacity: 0,
-  y: 50,
-  duration: 1,
-  scrollTrigger: {
-    trigger: "#contacto",
-    start: "top 80%",
-    toggleActions: "play none none none"
-  }
-});
+
 
 // Particle System (Luciérnagas)
 const particlesContainer = document.getElementById('particles');
@@ -132,35 +109,3 @@ function scrollPortfolio(amount) {
     }
   }
 }
-
-// Form Submission
-document.getElementById('contact-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const form = e.target;
-  const formMessage = document.getElementById('form-message');
-
-  formMessage.textContent = '';
-  formMessage.className = 'form-message';
-
-  try {
-    const response = await fetch(form.action, {
-      method: form.method,
-      body: new FormData(form),
-      headers: {
-        'Accept': 'application/json'
-      }
-    });
-
-    if (response.ok) {
-      formMessage.textContent = '¡Mensaje enviado con éxito!';
-      formMessage.className = 'form-message success';
-      form.reset();
-    } else {
-      formMessage.textContent = 'Error al enviar el mensaje. Por favor, intenta de nuevo.';
-      formMessage.className = 'form-message error';
-    }
-  } catch (error) {
-    formMessage.textContent = 'Error al enviar el mensaje. Por favor, intenta de nuevo.';
-    formMessage.className = 'form-message error';
-  }
-});
