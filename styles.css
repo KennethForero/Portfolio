@@ -110,19 +110,19 @@ body {
   }
   .project-year {
     right: 10px;
-    background-color: #f97316cc;
+    background-color: #000000cc;
   }
   .project-type {
     left: 10px;
   }
   .project-type--Producto {
-    background-color: rgba(245, 158, 11, 0.8);
+    background-color: #2b746c;
   }
   .project-type--Prototipo {
-    background-color: rgba(34, 197, 94, 0.8);
+    background-color: #E5440D;
   }
   .project-type--GameJam {
-    background-color: #7c3aedcc;
+    background-color: #22c55ecc;
   }
   .project-image-container img {
     transition: transform 0.4s ease;
