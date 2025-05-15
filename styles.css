@@ -1,6 +1,6 @@
 /* Background & Overlay */
 body {
-    background: url('/Portfolio/assets/Hero.png') center/cover no-repeat fixed;
+    background: url('/assets/Hero.png') center/cover no-repeat fixed;
     color: #F5E8C7;
   }
   .hero-overlay {
