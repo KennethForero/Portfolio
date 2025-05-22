@@ -2,6 +2,7 @@
 <html lang="es">
 
 <head>
+  
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description"
@@ -67,18 +68,22 @@
 
     <div
       class="relative max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 backdrop-blur-sm bg-white/5 rounded-2xl border border-orange-400/40 p-6 shadow-neon-orange">
-      <!-- Botón de cerrar (ícono de close) -->
+      <!-- Botón de cerrar (ícono de close) 
       <button class="absolute top-1 right-1 rounded-full transition-all">
         <img src="assets/Close.png" alt="Cerrar" class="w-12 h-12 text-orange-100" />
       </button>
+       -->
       <!-- Columna 1: XP y Educación -->
       <div class="flex flex-col justify-between gap-1">
 
         <div
-          class="p-4 rounded-xl border border-orange-400/50 backdrop-blur-md hover:shadow-neon-orange transition-shadow text-right">
-          <h3 class="text-orange-300 text-xl font-bold mb-2 tracking-wide">Experiencia</h3>
-          <h2 class="text-1xl font text-orange-100 my-2">3 años en desarrollo XR</h2>
-        </div>
+  class="p-4 rounded-xl border border-orange-300/30 backdrop-blur-lg bg-orange-900/20 hover:shadow-neon-orange transition-shadow text-right text-white">
+  <h3 class="text-orange-300 text-xl font-bold mb-2 tracking-wide">Experiencia</h3>
+  <h2 class="text-base text-orange-100 my-2">+3 años creando experiencias inmersivas en VR.</h2>
+  <h2 class="text-base text-orange-100 my-2">Desarrollo de videojuegos con Unity y C#.</h2>
+  <h2 class="text-base text-orange-100 my-2">Simulaciones interactivas para capacitación industrial.</h2>
+  <h2 class="text-base text-orange-100 my-2">Diseño de interfaces y experiencias UI/UX centradas en el usuario.</h2>
+</div>
         <div
           class="p-4 rounded-xl border border-orange-400/50 backdrop-blur-md hover:shadow-neon-orange transition-shadow text-right">
           <h3 class="text-orange-300 text-xl font-bold mb-2 tracking-wide">Educación</h3>
@@ -90,8 +95,9 @@
       </div>
       <!-- Columna 2: Avatar rectangular adaptado -->
       <div class="flex items-center justify-center">
-        <div class="relative w-full max-w-[220px]">
-          <img src="assets/avatar.png" alt="Avatar" />
+        <div class="relative w-full max-w-[220px] group w-fit">
+          <img src="assets/avatar.png" alt="Avatar" class="group-hover:hidden block" />
+          <img src="assets/avatar2.png" alt="Avatar 2" class="hidden group-hover:block" />
         </div>
       </div>
       <!-- Columna 3: Habilidades en formato slot -->

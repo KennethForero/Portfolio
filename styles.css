@@ -2,6 +2,7 @@
 body {
     background: url('assets/Background.png') center/cover no-repeat fixed;
     color: #F5E8C7;
+    
   }
   .hero-overlay {
     @apply absolute inset-0 bg-black bg-opacity-65;
