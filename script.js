@@ -111,6 +111,8 @@ function scrollPortfolio(amount) {
 // Language Toggle Functionality
 const translations = {
   es: {
+    'project-capsulas-title': 'Invitación Cápsulas Digitales - AR',
+  'project-capsulas-desc': 'Proyecto desarrollado para Brinsa en colaboración con la Facultad de Transformación Digital e Innovación. Esta experiencia en realidad aumentada permite escanear un código QR para invocar a Inno, la mascota oficial de la facultad, quien te invita a explorar una serie de cápsulas audiovisuales enfocadas en herramientas digitales para mejorar tu productividad.',
     'greeting': 'Hola, soy',
     'job-title': 'Desarrollador de Videojuegos',
     'download-cv': 'Descargar CV',
@@ -174,6 +176,8 @@ const translations = {
     'footer': '© 2025 Kenneth Forero. Todos los derechos reservados.'
   },
   en: {
+    'project-capsulas-title': 'Digital Capsules Invitation - AR',
+  'project-capsulas-desc': 'Project developed for Brinsa in collaboration with the School of Digital Transformation and Innovation. This augmented reality experience allows you to scan a QR code to summon Inno, the school\'s official mascot, who invites you to explore a series of audiovisual capsules focused on digital tools to improve your productivity.',
     'greeting': 'Hello, I am',
     'job-title': 'Game Developer',
     'download-cv': 'Download CV',
